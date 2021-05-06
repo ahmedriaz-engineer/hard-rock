@@ -1,7 +1,15 @@
 const input = document.getElementById("input-field");
 const search = document.getElementById("search-btn");
 
+// added enter key functionality for search..
+input.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+        search.click();
+    }
+})
+
 const searchResult = async () => {
+    toggleSpinner();
     const url = `https://api.lyrics.ovh/suggest/${input.value}`
     console.log(url);
     // load data..
@@ -35,13 +43,14 @@ const displaySongs = (songs) => {
             </div>
         `;
         songContainer.appendChild(songDiv);
+        toggleSpinner();
     });
-    
+
 
 }
 
 const getLyrics = async (artist, title) => {
-    
+
     const url = `https://api.lyrics.ovh/v1/${artist}/${title}`
     console.log(url);
     try {
@@ -49,7 +58,7 @@ const getLyrics = async (artist, title) => {
         const data = await response.json();
         displayLyrics(data.lyrics);
     }
-    catch(error){
+    catch (error) {
         displayError("Sorry, something went wrong!! Please try again later.");
     }
 
@@ -62,4 +71,12 @@ const displayLyrics = (lyrics) => {
 
 const displayError = (error) => {
     document.getElementById("error-message").innerText = error;
+}
+
+const toggleSpinner = () => {
+    const spinner = document.getElementById("loading");
+    const songs = document.getElementById("song-container");
+    spinner.classList.toggle("d-none");
+    songs.classList.toggle("d-none");
+    
 }
